@@ -1,0 +1,9 @@
+
+## Title: Show|c556b2fBlastbones|r
+## APIVersion: 100027
+## Author: Floliroy
+## Version: 1
+## SavedVariables: ShowBlastVariables
+
+ShowBlast.lua
+ShowBlast.xml            
