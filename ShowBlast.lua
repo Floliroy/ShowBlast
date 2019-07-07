@@ -24,7 +24,7 @@ function ShowBlast.CreateSettingsWindow()
 		displayName = "Show|c556b2fBlastbones|r",
 		author = "Floliroy",
 		version = ShowBlast.version,
-		slashCommand = "/htbeam",
+		slashCommand = "/showblast",
 		registerForRefresh = true,
 		registerForDefaults = true,
 	}
