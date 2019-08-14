@@ -5,8 +5,8 @@ ShowBlast = ShowBlast or {}
 local ShowBlast = ShowBlast
 
 ShowBlast.name = "ShowBlast"
-ShowBlast.version = "1"
-local LAM2 = LibStub:GetLibrary("LibAddonMenu-2.0")
+ShowBlast.version = "1.1"
+local LAM2 = LibAddonMenu2
 
 ---------------------------
 ---- Variables Default ----
