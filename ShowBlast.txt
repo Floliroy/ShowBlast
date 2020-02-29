@@ -1,8 +1,7 @@
-
 ## Title: Show|c556b2fBlastbones|r
-## APIVersion: 100028
+## APIVersion: 100030
 ## Author: Floliroy
-## Version: 1.1
+## Version: 1.2
 ## DependsOn: LibAddonMenu-2.0
 ## SavedVariables: ShowBlastVariables
 

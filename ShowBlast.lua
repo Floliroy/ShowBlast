@@ -5,7 +5,7 @@ ShowBlast = ShowBlast or {}
 local ShowBlast = ShowBlast
 
 ShowBlast.name = "ShowBlast"
-ShowBlast.version = "1.1"
+ShowBlast.version = "1.2"
 local LAM2 = LibAddonMenu2
 
 ---------------------------
@@ -75,12 +75,13 @@ function ShowBlast.UnregisterCallLater()
 end
 
 local isActive = true
+local activeAbilityID, inactiveAbilityID
 function ShowBlast.Run(_, _, _, _, unitTag, _, _, _, _, _, _, _, _, _, _, abilityId, _)	
 	--Set here the fact that player can take Grave Robber
 	isActive = not isActive
 	if isActive then
 		ShowBlastUI_Border:SetColor(0, 1, 0)
-		ShowBlastUI_Icon:SetTexture(GetAbilityIcon(117691))
+		ShowBlastUI_Icon:SetTexture(GetAbilityIcon(activeAbilityID))
 
 		EVENT_MANAGER:UnregisterForUpdate(ShowBlast.name .. "TimerActive")
 
@@ -89,13 +90,13 @@ function ShowBlast.Run(_, _, _, _, unitTag, _, _, _, _, _, _, _, _, _, _, abilit
 		EVENT_MANAGER:RegisterForUpdate(ShowBlast.name .. "CallLater", 2600, ShowBlast.UnregisterCallLater)
 	else
 		ShowBlastUI_Border:SetColor(1, 0, 0)
-		ShowBlastUI_Icon:SetTexture(GetAbilityIcon(117693))
+		ShowBlastUI_Icon:SetTexture(GetAbilityIcon(inactiveAbilityID))
 		
 		EVENT_MANAGER:UnregisterForUpdate(ShowBlast.name .. "TimerEnded")
 		EVENT_MANAGER:UnregisterForUpdate(ShowBlast.name .. "CallLater")
 
 		ShowBlastUI_Timer:SetHidden(false)
-		blastTimer = GetAbilityDuration(117691)
+		blastTimer = GetAbilityDuration(activeAbilityID)
 		EVENT_MANAGER:RegisterForUpdate(ShowBlast.name .. "TimerActive", 100, ShowBlast.UpdateTimer)	
 	end
 end
@@ -106,19 +107,30 @@ function ShowBlast:Initialize()
 	--Saved Variables
 	ShowBlast.savedVariables = ZO_SavedVars:New("ShowBlastVariables", 1, nil, ShowBlast.Default)
 
+	--Detect if magicka or stamina
+	_, maxMagicka, _ = GetUnitPower("player", POWERTYPE_MAGICKA)
+	_, maxStamina, _ = GetUnitPower("player", POWERTYPE_STAMINA)
+	if maxMagicka > maxStamina then
+		activeAbilityID = 117750
+		inactiveAbilityID = 117693
+	else
+		activeAbilityID = 117691
+		inactiveAbilityID = 117773
+	end
+
 	--UI
 	ShowBlastUI:ClearAnchors()
 	ShowBlastUI:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, ShowBlast.savedVariables.OffsetX, ShowBlast.savedVariables.OffsetY)
 	ShowBlastUI_Border:SetColor(0, 1, 0)
-	ShowBlastUI_Icon:SetTexture(GetAbilityIcon(117691))
+	ShowBlastUI_Icon:SetTexture(GetAbilityIcon(activeAbilityID))
 	ShowBlastUI_Timer:SetHidden(true)
-
+	
 	--Run
 	if GetUnitClassId("player") == 5 then
 		ShowBlastUI:SetHidden(false)
 
 		EVENT_MANAGER:RegisterForEvent(ShowBlast.name .. "Active", EVENT_EFFECT_CHANGED, ShowBlast.Run)
-		EVENT_MANAGER:AddFilterForEvent(ShowBlast.name .. "Active", EVENT_EFFECT_CHANGED, REGISTER_FILTER_ABILITY_ID, 117691, REGISTER_FILTER_UNIT_TAG, "player")
+		EVENT_MANAGER:AddFilterForEvent(ShowBlast.name .. "Active", EVENT_EFFECT_CHANGED, REGISTER_FILTER_ABILITY_ID, activeAbilityID, REGISTER_FILTER_UNIT_TAG, "player")
 
 		EVENT_MANAGER:RegisterForEvent(ShowBlast.name .. "Reticle", EVENT_RETICLE_HIDDEN_UPDATE, ShowBlast.ReticleChange)
 	else
