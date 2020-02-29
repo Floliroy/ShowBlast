@@ -112,10 +112,10 @@ function ShowBlast:Initialize()
 	_, maxStamina, _ = GetUnitPower("player", POWERTYPE_STAMINA)
 	if maxMagicka > maxStamina then
 		activeAbilityID = 117750
-		inactiveAbilityID = 117693
+		inactiveAbilityID = 117773
 	else
 		activeAbilityID = 117691
-		inactiveAbilityID = 117773
+		inactiveAbilityID = 117693
 	end
 
 	--UI
